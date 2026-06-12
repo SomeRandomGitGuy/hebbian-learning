@@ -56,7 +56,7 @@ function update(){
                     }
                     for (let selected of neurons){
                         if (selected.name == connection && selected.activated == 0){
-                            selected.activated = Math.floor(Math.random() * neuron.connections[connection]) * 30;
+                            selected.activated = 200;//*Math.floor(Math.random() * neuron.connections[connection]) * 30;
                             selected.triggered = true;
                             neuron.connections[connection] -= 0.01;
                         }
