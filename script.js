@@ -83,7 +83,7 @@ function update(){
     render();
     document.getElementById("data").textContent = "";
     for (let neuron of neurons){
-        if(Math.random() * 10 < 1) {
+        if(Math.random() * 20 < 1) {
             for (let connection in neuron.connections){
                 if (neuron.connections[connection] > 0){
                     neuron.connections[connection] -= 0.001;
@@ -103,7 +103,7 @@ function render(){
         for (let connection in neuron.connections){
             for (let possible of neurons){
                 if (possible.name == connection){
-                    if (neuron.activated > 100 && possible.activated > 100 && possible.triggered){
+                    if (neuron.activated > 0 && possible.activated > 0 && possible.triggered){
                         ctx.strokeStyle = "yellow";
                     } else {
                         ctx.strokeStyle = "grey";
