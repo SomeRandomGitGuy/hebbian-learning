@@ -5,6 +5,11 @@ body {
     overflow-x: hidden;
 }
 
+h1 {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
 .dark {
     color: #121212;
 }

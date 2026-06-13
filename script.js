@@ -57,10 +57,19 @@ function update(){
                     }
                     for (let selected of neurons){
                         if (selected.name == connection && selected.activated == 0){
-                            selected.activated = 200;//*Math.floor(Math.random() * neuron.connections[connection]) * 30;
-                            selected.triggered = true;
-                            selected.triggeredBy = neuron.name;
-                            neuron.connections[connection] -= 0.1;
+                            if(document.getElementById("delay").checked == true) {
+                                setTimeout(()=>{
+                                    selected.activated = 200;//*Math.floor(Math.random() * neuron.connections[connection]) * 30;
+                                    selected.triggered = true;
+                                    selected.triggeredBy = neuron.name;
+                                    neuron.connections[connection] -= 0.1;
+                                },100);
+                            } else {
+                                selected.activated = 200;//*Math.floor(Math.random() * neuron.connections[connection]) * 30;
+                                selected.triggered = true;
+                                selected.triggeredBy = neuron.name;
+                                neuron.connections[connection] -= 0.1;
+                            }
                         }
                     }
                 }
@@ -110,6 +119,9 @@ function render(){
                         ctx.strokeStyle = "#ffd60a";
                     } else if (neuron.activated > 0 && possible.activated > 0 && !neuron.triggered && !possible.triggered){
                         ctx.strokeStyle = "#21ad15";
+                    }
+                    if (neuron.connections[connection] < 0.01){
+                        break;
                     }
                     ctx.lineWidth = neuron.connections[connection];
                     ctx.beginPath();
