@@ -58,7 +58,7 @@ function update(){
                         if (selected.name == connection && selected.activated == 0){
                             selected.activated = 200;//*Math.floor(Math.random() * neuron.connections[connection]) * 30;
                             selected.triggered = true;
-                            neuron.connections[connection] -= 0.01;
+                            neuron.connections[connection] -= 0.1;
                         }
                     }
                 }
@@ -81,7 +81,20 @@ function update(){
         }
     }
     render();
-    console.log(neurons);
+    document.getElementById("data").textContent = "";
+    for (let neuron of neurons){
+        if(Math.random() * 10 < 1) {
+            for (let connection in neuron.connections){
+                if (neuron.connections[connection] > 0){
+                    neuron.connections[connection] -= 0.001;
+                    neuron.connections[connection] = rT3(neuron.connections[connection]);
+                }
+            }
+        }
+        document.getElementById("data").textContent += `${JSON.stringify(neuron)}\n`;
+    }
+    
+
 }
 
 function render(){
@@ -90,11 +103,12 @@ function render(){
         for (let connection in neuron.connections){
             for (let possible of neurons){
                 if (possible.name == connection){
-                    if (neuron.activated > 100 && possible.activated > 100 && neuron.triggered){
+                    if (neuron.activated > 100 && possible.activated > 100 && possible.triggered){
                         ctx.strokeStyle = "yellow";
                     } else {
                         ctx.strokeStyle = "grey";
                     }
+                    ctx.lineWidth = neuron.connections[connection];
                     ctx.beginPath();
                     ctx.moveTo(neuron.posx,neuron.posy);
                     ctx.lineTo(possible.posx, possible.posy);
@@ -105,20 +119,30 @@ function render(){
             }
         }
     }
+    ctx.lineWidth = 4;
     
     for (let neuron of neurons){
-        drawNeuron(neuron.posx,neuron.posy,neuron.name,neuron.activated > 100,neuron);
+        drawNeuron(neuron.posx,neuron.posy,neuron.name,neuron.activated > 0,neuron);
     }
+}
+
+function rT3(number){
+    return Math.round(parseFloat(number)*1000)/1000;
 }
 
 
 document.addEventListener("keydown", logKey);
 function logKey(e) {
+    if (e.key.length > 1){
+        return;
+    }
     for (let neuron of neurons){
-        if (neuron.name == e.key.toUpperCase()){
+        if (neuron.name == e.key.toUpperCase() && (neuron.activated == 0 || neuron.triggered)){
             neuron.activated = 200;
             neuron.triggered = false;
             neuron.startTime = Date.now();
+            return;
+        } else if (neuron.name == e.key.toUpperCase() && neuron.activated > 0){
             return;
         }
     }
@@ -131,4 +155,4 @@ function logKey(e) {
     newNeuron(row * rowdist + rowoffset, column * columndist + columnoffset, e.key.toUpperCase());
 }
 
-setInterval(update,0,1);
+setInterval(update,1);

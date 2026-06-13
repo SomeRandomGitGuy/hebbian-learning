@@ -2,7 +2,7 @@ body {
     font-family: "Old Standard TT";
     background-color: #121212;
     color: #FAF9F6;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 .dark {
@@ -12,5 +12,4 @@ body {
 .canv {
     width: 100%;
     height: 100%;
-    position: absolute;
 }
