@@ -21,7 +21,7 @@ function drawNeuron(posx,posy,text,activated,neuron){
     ctx.arc(posx, posy, 40, 0, Math.PI * 2, true);
     ctx.fillStyle = "#FAF9F6";
     if (activated){
-        ctx.fillStyle = "#ffdd00";
+        ctx.fillStyle = "#ffd60a";
     }
     ctx.lineWidth = 4;
     ctx.fill();
@@ -40,6 +40,7 @@ function newNeuron(posx, posy, name){
     neuron.posy = posy;
     neuron.activated = 0;
     neuron.triggered = false;
+    neuron.triggeredBy = "";
     neuron.connections = {};
     neuron.startTime = 0;
     neuron.threshold = 5;
@@ -58,6 +59,7 @@ function update(){
                         if (selected.name == connection && selected.activated == 0){
                             selected.activated = 200;//*Math.floor(Math.random() * neuron.connections[connection]) * 30;
                             selected.triggered = true;
+                            selected.triggeredBy = neuron.name;
                             neuron.connections[connection] -= 0.1;
                         }
                     }
@@ -78,6 +80,7 @@ function update(){
             neuron.activated -= 1;
         } else if (neuron.triggered){
             neuron.triggered = false;
+            neuron.triggeredBy = "";
         }
     }
     render();
@@ -103,10 +106,10 @@ function render(){
         for (let connection in neuron.connections){
             for (let possible of neurons){
                 if (possible.name == connection){
-                    if (neuron.activated > 0 && possible.activated > 0 && possible.triggered){
-                        ctx.strokeStyle = "yellow";
-                    } else {
-                        ctx.strokeStyle = "grey";
+                    if (neuron.activated > 0 && possible.activated > 0 && possible.triggered && possible.triggeredBy == neuron.name){
+                        ctx.strokeStyle = "#ffd60a";
+                    } else if (neuron.activated > 0 && possible.activated > 0 && !neuron.triggered && !possible.triggered){
+                        ctx.strokeStyle = "#21ad15";
                     }
                     ctx.lineWidth = neuron.connections[connection];
                     ctx.beginPath();
